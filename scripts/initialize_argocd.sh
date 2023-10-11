@@ -13,7 +13,7 @@ kubectl wait --for=condition=available deployment/argocd-server -n argocd --time
 
 echo "Configure ArgoCD..."
 kubectl apply -n argocd -f .devcontainer/argocd-no-tls.yaml
-kubectl apply -n argocd -f .devcontainer/argocd-service.yaml
+kubectl apply -n argocd -f .devcontainer/argocd-nodeport.yaml
 
 echo "Restart ArgoCD server..."
 kubectl -n argocd rollout restart deploy/argocd-server
