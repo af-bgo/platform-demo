@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Creating Kind cluster..."
-kind create cluster --config cluster/kind-devcontainer.yaml
+kind create cluster --config cluster/kind-cluster.yaml
 echo ""
 
 echo "Deploy ArgoCD..."
