@@ -1,4 +1,4 @@
-kind delete clusters demo-cluster
+kind delete clusters platform-demo
 kind create cluster --config ../cluster/kind-cluster.yaml
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
