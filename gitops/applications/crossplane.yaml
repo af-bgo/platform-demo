@@ -5,6 +5,8 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
   name: crossplane
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   chart: crossplane
   repoURL: https://charts.crossplane.io/stable
