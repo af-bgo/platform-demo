@@ -9,8 +9,8 @@
 1. Clone this repository
 
 ```
-git clone https://github.com/AloisReitbauer/progressiveDelivery-masterclass
-cd progressiveDelivery-masterclass
+git clone https://github.com/af-bgo/platform-demo
+cd platform-demo
 ```
 
 ## Create a fresh cluster
