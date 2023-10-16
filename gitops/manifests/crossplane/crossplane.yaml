@@ -2,16 +2,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: crossplane-app
+  name: crossplane
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/af-bgo/platform-demo.git'
-    targetRevision: HEAD
-    path: "gitops/manifests/crossplane"
+    chart: crossplane
+    repoURL: https://charts.crossplane.io/stable
+    targetRevision: 1.13.2
+    helm:
+      releaseName: crossplane
   destination:
     server: https://kubernetes.default.svc
     namespace: crossplane-system
@@ -19,6 +23,5 @@ spec:
     automated:
       selfHeal: true
       prune: true
-      allowEmpty: true
     syncOptions:
       - CreateNamespace=true
