@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: argocd.boilerplate.io
+  - host: argocd.127.0.0.1.boilerplate.io
     http:
       paths:
       - path: /
