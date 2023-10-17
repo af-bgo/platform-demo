@@ -11,7 +11,7 @@ spec:
     targetRevision: main
     path: "gitops/manifests/aws-resources"
   destination:
-    namespace: argocd
+    namespace: crossplane-system
     server: 'https://kubernetes.default.svc'
   project: default
   syncPolicy:
