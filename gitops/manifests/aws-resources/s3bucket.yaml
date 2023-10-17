@@ -1,9 +1,0 @@
-apiVersion: s3.aws.upbound.io/v1beta1
-kind: Bucket
-metadata:
-  name: test-bucket
-spec:
-  forProvider:
-    region: eu-north-1
-  providerConfigRef:
-    name: default
