@@ -7,7 +7,10 @@ The architecture for the Platform can be found below:
 
 ![Platform Infrastructure Architecture](architecture/platform_infrastructure_architecture.png)
 
-## Initial Setup
+## Tools used/Required
+ 
+* `kubectl` CLI installed (can be found [here]())
+* ``
 
 Create a kind cluster using the following command:
 

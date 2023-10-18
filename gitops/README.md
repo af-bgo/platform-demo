@@ -64,26 +64,11 @@ Sync waves allow you to ensure that certain resources are healthy before others 
 Applies custom argocd-cm for Application Health Status
 
 ### Sync Wave 0
-- Cert Manager
 - NGINX Ingress
-
+- Crossplane
+- 
 ### Sync Wave 2
-- Keptn Lifecycle Toolkit
-- OpenFeature Operator
-- Prometheus CRDs
-
-### Sync Wave 3
-- `prometheus-grafana` application
-- Jaeger Operator
-- OpenTelemetry Collector
-- Argo Rollouts
-
-### Sync Wave 4
-- `featureflags` application
-- Keptn Lifecycle Toolkit Config
-
-### Sync Wave 10
-- `demo-application`
+- Providers for Cloud native environment (AWS, Azure, GCP, IONOS or others)
 
 ## Open ArgoCD and Wait
 Open ArgoCD by going to `http://localhost:8080`
@@ -92,22 +77,11 @@ As a reminder, you can retrieve the password with: `argocd admin initial-passwor
 
 The app-of-apps will installs things in waves and until that time, expect the applications list to grow as things are rolled out.
 
-Once the `progressive-delivery-masterclass` application is green, you can proceed (it should take about 15 minutes).
+Once the `argocd-platform-demo` application is green, you can proceed (it should take about 15 minutes).
 
 ## Argo Ingress
 An ingress has been added for argocd during deployment.
 
-When the `progressive-delivery-masterclass` application is healthy, you can stop the `port-forward` and instead:L
+When the `argocd-platform-demo` application is healthy, you can stop the `port-forward` and instead:L
 
 - Navigate to `http://argocd.127.0.0.1.nip.io`
-
-## Open Applicaiton
-The demo application is available at: `http://127.0.0.1.nip.io/` (not `http://localhost.nip.io` !)
-
-Expect to see the text `Hello World!`.
-
-## Observability Tooling
-- Grafana is available: `http://grafana.127.0.0.1.nip.io` (username: `admin`, password: `admin`)
-- Prometheus is available: `http://prometheus.127.0.0.1.nip.io`
-- Jaeger is available: `http://jaeger.127.0.0.1.nip.io`
-- DORA Metrics dashboard is available: `http://grafana.127.0.0.1.nip.io/d/nbiPNgN4z/keptn-applications`
