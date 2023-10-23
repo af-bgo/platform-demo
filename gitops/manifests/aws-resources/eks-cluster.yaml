@@ -11,4 +11,4 @@ spec:
   parameters:
     nodeSize: small
     version: "1.27"
-    minNodeCount: 1
+    minNodeCount: 3
