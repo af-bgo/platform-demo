@@ -1,0 +1,15 @@
+apiVersion: devopstoolkitseries.com/v1alpha1
+kind: ClusterClaim
+metadata:
+  name: istio-eks
+spec:
+  id: istio-eks
+  compositionSelector:
+    matchLabels:
+      provider: aws-official
+      cluster: eks
+  parameters:
+    nodeSize: small
+    version: "1.27"
+    minNodeCount: 1
+    maxNodeCount: 5
