@@ -12,4 +12,3 @@ spec:
     nodeSize: small
     version: "1.27"
     minNodeCount: 1
-    maxNodeCount: 5
