@@ -10,5 +10,4 @@ spec:
       cluster: eks
   parameters:
     nodeSize: small
-    version: "1.27"
-    minNodeCount: 3
+    minNodeCount: 2
