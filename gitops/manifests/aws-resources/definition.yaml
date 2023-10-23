@@ -4,6 +4,8 @@ metadata:
   name: compositeclusters.devopstoolkitseries.com
   labels:
     idp: "true"
+  annotations:
+    argocd.argoproj.io/hook: PostSync
 spec:
   connectionSecretKeys:
     - kubeconfig
