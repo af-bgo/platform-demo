@@ -66,9 +66,9 @@ Steps:
     apiVersion: pkg.crossplane.io/v1
     kind: Provider
     metadata:
-      name: provider-aws-s3
+      name: provider-aws.yaml-s3
     spec:
-      package: xpkg.upbound.io/upbound/provider-aws-s3:v0.42.0
+      package: xpkg.upbound.io/upbound/provider-aws.yaml-s3:v0.42.0
     ```
 7. Commit and push the changes
 8. Check the changes in ArgoCD console (http://argocd.127.0.0.1.nip.io)
