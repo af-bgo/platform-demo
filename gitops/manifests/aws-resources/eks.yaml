@@ -21,7 +21,7 @@ spec:
         kind: Cluster
         spec:
           forProvider:
-            region: eu-central-1
+            region: eu-north-1
             version: "1.27"
             roleArnSelector:
               matchControllerRef: true
@@ -67,7 +67,7 @@ spec:
         kind: NodeGroup
         spec:
           forProvider:
-            region: eu-central-1
+            region: eu-north-1
             clusterNameSelector:
               matchControllerRef: true
             nodeRoleSelector:
@@ -297,7 +297,7 @@ spec:
         kind: VPC
         spec:
           forProvider:
-            region: eu-central-1
+            region: eu-north-1
             cidrBlock: 10.0.0.0/16
             enableDnsSupport: true
       patches:
@@ -311,7 +311,7 @@ spec:
           forProvider:
             description: Cluster communication with worker nodes
             groupName: devops-catalog
-            region: eu-central-1
+            region: eu-north-1
             vpcIdSelector:
               matchControllerRef: true
             egress:
@@ -329,12 +329,12 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: eu-central-1a
+            zone: eu-north-1a
             access: public
         spec:
           forProvider:
-            region: eu-central-1
-            availabilityZone: eu-central-1a
+            region: eu-north-1
+            availabilityZone: eu-north-1a
             cidrBlock: 10.0.0.0/24
             vpcIdSelector:
               matchControllerRef: true
@@ -355,12 +355,12 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: eu-central-1b
+            zone: eu-north-1b
             access: public
         spec:
           forProvider:
-            region: eu-central-1
-            availabilityZone: eu-central-1b
+            region: eu-north-1
+            availabilityZone: eu-north-1b
             cidrBlock: 10.0.1.0/24
             vpcIdSelector:
               matchControllerRef: true
@@ -381,12 +381,12 @@ spec:
         kind: Subnet
         metadata:
           labels:
-            zone: eu-central-1c
+            zone: eu-north-1c
             access: public
         spec:
           forProvider:
-            region: eu-central-1
-            availabilityZone: eu-central-1c
+            region: eu-north-1
+            availabilityZone: eu-north-1c
             cidrBlock: 10.0.2.0/24
             vpcIdSelector:
               matchControllerRef: true
@@ -407,7 +407,7 @@ spec:
         kind: InternetGateway
         spec:
           forProvider:
-            region: eu-central-1
+            region: eu-north-1
             vpcIdSelector:
               matchControllerRef: true
       patches:
@@ -419,7 +419,7 @@ spec:
         kind: RouteTable
         spec:
           forProvider:
-            region: eu-central-1
+            region: eu-north-1
             vpcIdSelector:
               matchControllerRef: true
             routes:
@@ -430,17 +430,17 @@ spec:
               - subnetIdSelector:
                   matchControllerRef: true
                   matchLabels:
-                    zone: eu-central-1a
+                    zone: eu-north-1a
                     access: public
               - subnetIdSelector:
                   matchControllerRef: true
                   matchLabels:
-                    zone: eu-central-1b
+                    zone: eu-north-1b
                     access: public
               - subnetIdSelector:
                   matchControllerRef: true
                   matchLabels:
-                    zone: eu-central-1c
+                    zone: eu-north-1c
                     access: public
       patches:
         - fromFieldPath: spec.id
