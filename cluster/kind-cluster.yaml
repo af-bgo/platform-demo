@@ -1,6 +1,6 @@
 apiVersion: kind.x-k8s.io/v1alpha4
 kind: Cluster
-name: platform-boilerplate
+name: aws-istio-demo
 nodes:
 - role: control-plane
   kubeadmConfigPatches:
