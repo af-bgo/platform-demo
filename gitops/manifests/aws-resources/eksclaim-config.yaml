@@ -1,0 +1,14 @@
+apiVersion: devopstoolkitseries.com/v1alpha1
+kind: ClusterClaim
+metadata:
+  name: istio-eks
+spec:
+  id: istio-eks
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      cluster: eks
+  parameters:
+    nodeSize: small
+  writeConnectionSecretToRef:
+    name: istio-eks
