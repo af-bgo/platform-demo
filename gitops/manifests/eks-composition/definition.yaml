@@ -13,10 +13,10 @@ spec:
   group: cluster.awsblueprints.io
   names:
     kind: XAmazonEks        # cluster scope type
-    plural: xamazoneks
+    plural: xamazonekss
   claimNames: # namespace scope type
     kind: amazonEks
-    plural: amazoneks      # lowercase only
+    plural: amazonekss      # lowercase only
 
   versions:
     - name: v1alpha1
