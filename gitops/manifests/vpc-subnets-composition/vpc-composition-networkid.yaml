@@ -241,7 +241,7 @@ spec:
           toFieldPath: spec.forProvider.ipv6CIDRBlock
         - fromFieldPath: spec.parameters.privateSubnet1-availabilityZone
           toFieldPath: spec.forProvider.availabilityZone
-        - fromFieldPath:  spec.parameters.privateSubnet1-availabilityZone
+        - fromFieldPath: spec.parameters.privateSubnet1-availabilityZone
           toFieldPath: metadata.labels.zone
     # Private Subnet2
     - name: private-subnet2
@@ -282,7 +282,7 @@ spec:
           toFieldPath: spec.forProvider.ipv6CIDRBlock
         - fromFieldPath: spec.parameters.privateSubnet2-availabilityZone
           toFieldPath: spec.forProvider.availabilityZone
-        - fromFieldPath:  spec.parameters.privateSubnet2-availabilityZone
+        - fromFieldPath: spec.parameters.privateSubnet2-availabilityZone
           toFieldPath: metadata.labels.zone
     # Private Subnet3
     - name: private-subnet3
@@ -323,7 +323,7 @@ spec:
           toFieldPath: spec.forProvider.ipv6CIDRBlock
         - fromFieldPath: spec.parameters.privateSubnet3-availabilityZone
           toFieldPath: spec.forProvider.availabilityZone
-        - fromFieldPath:  spec.parameters.privateSubnet3-availabilityZone
+        - fromFieldPath: spec.parameters.privateSubnet3-availabilityZone
           toFieldPath: metadata.labels.zone
     # Internet Gateway
     - name: internetgateway

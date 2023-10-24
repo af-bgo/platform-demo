@@ -10,7 +10,7 @@ spec:
   names:
     kind: XVpcSubnet        # cluster scope type
     plural: xvpcsubnets     # lowercase only
-  claimNames:               # namespace scope type
+  claimNames: # namespace scope type
     kind: vpcSubnet
     plural: vpcsubnets      # lowercase only
 

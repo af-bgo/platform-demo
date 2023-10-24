@@ -237,7 +237,7 @@ spec:
             roleNameSelector:
               matchControllerRef: true
               matchLabels:
-                role:  managed-nodegroup
+                role: managed-nodegroup
       patches:
         - type: PatchSet
           patchSetName: common-parameters

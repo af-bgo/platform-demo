@@ -8,13 +8,13 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: argocd.127.0.0.1.nip.io
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: argocd-server
-            port:
-              number: 8080
+    - host: argocd.127.0.0.1.nip.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 8080
