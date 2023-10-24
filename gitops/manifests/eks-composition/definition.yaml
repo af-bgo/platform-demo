@@ -13,10 +13,10 @@ spec:
   group: cluster.awsblueprints.io
   names:
     kind: XAmazonEks        # cluster scope type
-    plural: xamazonekss
+    plural: xamazoneks
   claimNames: # namespace scope type
     kind: amazonEks
-    plural: amazonekss      # lowercase only
+    plural: amazoneks      # lowercase only
 
   versions:
     - name: v1alpha1
@@ -40,7 +40,7 @@ spec:
                     version:
                       description: Kubernetes Version
                       type: string
-                      enum: [ "1.22", "1.23", "1.24", "1.25" ]
+                      enum: [ "1.25", "1.26", "1.27", "1.28" ]
                     endpointPrivateAccess:
                       description: endpointPrivateAccess
                       type: boolean
