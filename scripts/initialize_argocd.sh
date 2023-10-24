@@ -18,8 +18,11 @@ echo "Restart ArgoCD server..."
 kubectl -n argocd rollout restart deploy/argocd-server
 kubectl -n argocd rollout status deploy/argocd-server --timeout=300s
 
-echo "Wait 30 seconds..."
-wait 30
+echo "Wait for ArgoCD to be ready..."
+kubectl wait --for=condition=available deployment/argocd-server -n argocd --timeout=300s
+
+#echo "Wait 30 seconds..."
+#wait 30
 
 echo "Create ArgoCD App of Apps..."
 kubectl -n argocd apply -f gitops/app-of-apps.yaml
