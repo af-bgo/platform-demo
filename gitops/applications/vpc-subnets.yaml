@@ -2,14 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
-  name: aws-resources
+    argocd.argoproj.io/sync-wave: "4"
+  name: vpc-subnets
   namespace: argocd
 spec:
   source:
     repoURL: 'https://github.com/af-bgo/platform-demo.git'
     targetRevision: main
-    path: "gitops/manifests/aws-resources"
+    path: "gitops/manifests/vpc-subnets"
   destination:
     namespace: argocd
     server: 'https://kubernetes.default.svc'
