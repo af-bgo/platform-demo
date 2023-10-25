@@ -81,7 +81,7 @@ spec:
                     publicSubnet1-availabilityZone:
                       description: AZ for public subnet 1
                       type: string
-                      default: eu-north-1a
+                      default: eu-west-1a
                     # Public Subnet2
                     publicSubnet2-cidrBlock:
                       description: CIDR block for public subnet2
@@ -92,7 +92,7 @@ spec:
                     publicSubnet2-availabilityZone:
                       description: AZ for public subnet2
                       type: string
-                      default: eu-north-1b
+                      default: eu-west-1b
                     # Public Subnet3
                     publicSubnet3-cidrBlock:
                       description: CIDR block for public subnet3
@@ -103,7 +103,7 @@ spec:
                     publicSubnet3-availabilityZone:
                       description: AZ for public subnet3
                       type: string
-                      default: eu-north-1c
+                      default: eu-west-1c
                     # Private Subnet1
                     privateSubnet1-cidrBlock:
                       description: CIDR block for public subnet 1
@@ -114,7 +114,7 @@ spec:
                     privateSubnet1-availabilityZone:
                       description: AZ for public subnet 1
                       type: string
-                      default: eu-north-1a
+                      default: eu-west-1a
                     # Private Subnet2
                     privateSubnet2-cidrBlock:
                       description: CIDR block for public subnet2
@@ -125,7 +125,7 @@ spec:
                     privateSubnet2-availabilityZone:
                       description: AZ for public subnet2
                       type: string
-                      default: eu-north-1b
+                      default: eu-west-1b
                     # Private Subnet3
                     privateSubnet3-cidrBlock:
                       description: CIDR block for public subnet3
@@ -136,7 +136,7 @@ spec:
                     privateSubnet3-availabilityZone:
                       description: AZ for public subnet3
                       type: string
-                      default: eu-north-1c
+                      default: eu-west-1c
                     # NAT Gateway
                     nat-connectivityType:
                       description: NAT gateway Connectivity type(public/private)
@@ -156,6 +156,7 @@ spec:
                     resource.
                   type: object
                   properties:
+
                     deletionPolicy:
                       description: Defaults to Delete
                       enum:
@@ -170,6 +171,7 @@ spec:
                       type: string
                     region:
                       type: string
+
                   required:
                     - providerConfigName
                     - region
