@@ -571,7 +571,7 @@ spec:
         spec:
           forProvider:
             addonName: aws-ebs-csi-driver
-            addonVersion: v1.18.0-eksbuild.1
+            addonVersion: v1.24.0-eksbuild.1
             clusterNameSelector:
               matchControllerRef: true
               matchLabels:
