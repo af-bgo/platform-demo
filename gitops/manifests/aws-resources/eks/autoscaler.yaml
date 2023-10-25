@@ -321,9 +321,9 @@ spec:
               matchLabels:
                 visibility: private
             scalingConfig:
-              minSize:
-              desiredSize:
-              maxSize:
+              minSize: 1
+              desiredSize: 2
+              maxSize: 5
             capacityType:
             instanceTypes:
               - t3.small

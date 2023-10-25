@@ -76,7 +76,7 @@ spec:
                     desiredSize:
                       type: integer
                       description: Nodegroup desiredSize.
-                      default: 1
+                      default: 2
                     maxSize:
                       type: integer
                       description: Nodegroup maxSize.

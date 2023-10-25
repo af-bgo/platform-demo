@@ -156,7 +156,6 @@ spec:
                     resource.
                   type: object
                   properties:
-
                     deletionPolicy:
                       description: Defaults to Delete
                       enum:
@@ -171,7 +170,6 @@ spec:
                       type: string
                     region:
                       type: string
-
                   required:
                     - providerConfigName
                     - region
