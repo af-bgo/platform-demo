@@ -336,8 +336,6 @@ spec:
           toFieldPath: spec.forProvider.scalingConfig.maxSize
         - fromFieldPath: spec.managedNodeGroups.desiredSize
           toFieldPath: spec.forProvider.scalingConfig.desiredSize
-        - fromFieldPath: spec.managedNodeGroups.desiredSize
-          toFieldPath: spec.forProvider.scalingConfig.desiredSize
         - fromFieldPath: spec.managedNodeGroups.capacityType
           toFieldPath: spec.forProvider.capacityType
         - fromFieldPath: spec.managedNodeGroups.instanceTypes
