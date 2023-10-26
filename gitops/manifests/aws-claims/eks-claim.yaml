@@ -1,4 +1,4 @@
-apiVersion: platformref.crossplane.io/v1alpha1
+apiVersion: platformref.appsfactory.de/v1alpha1
 kind: Cluster
 metadata:
   name: istio-dev
