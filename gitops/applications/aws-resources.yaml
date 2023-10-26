@@ -10,8 +10,6 @@ spec:
     repoURL: 'https://github.com/af-bgo/platform-demo.git'
     targetRevision: main
     path: "gitops/manifests/aws-resources"
-    kustomize:
-      version: v5.2.1
   destination:
     namespace: argocd
     server: 'https://kubernetes.default.svc'
