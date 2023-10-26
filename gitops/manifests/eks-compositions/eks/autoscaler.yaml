@@ -480,6 +480,111 @@ spec:
             - type: string
               string:
                 fmt: "eks-worker-cni-%s"
+    # CSI addon configuration
+    - name: csi-role
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: Role
+        metadata:
+          labels:
+            role: csi-role
+        spec:
+          forProvider:
+            name: ""
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.arn
+          toFieldPath: status.roleArnCSI
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: status.accountID
+              - fromFieldPath: status.oidcEKS
+              - fromFieldPath: status.oidcEKS
+              - fromFieldPath: status.oidcEKS
+            strategy: string
+            #TODO need to create a k8s service account called projectname-oss-serviceaccount
+            string:
+              fmt: |
+                {
+                   "Version": "2012-10-17",
+                   "Statement": [{
+                   "Effect": "Allow",
+                   "Principal": {
+                     "Federated": "arn:aws:iam::%s:oidc-provider/%s"
+                   },
+                 "Action": "sts:AssumeRoleWithWebIdentity",
+                 "Condition": {
+                   "StringEquals": {
+                   "%s:aud": "sts.amazonaws.com",
+                   "%s:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+                                   }
+                               }
+                     }]
+                }
+          toFieldPath: spec.forProvider.assumeRolePolicyDocument
+          policy:
+            fromFieldPath: Required
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+            strategy: string
+            string:
+              fmt: "csi-%s"
+          toFieldPath: spec.forProvider.name
+    - name: csi-policy-attachment
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: csi-role
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-csi-%s"
+    - name: eks-csi-driver
+      base:
+        apiVersion: eks.aws.crossplane.io/v1alpha1
+        kind: Addon
+        metadata:
+        spec:
+          forProvider:
+            addonName: aws-ebs-csi-driver
+            addonVersion: v1.24.0-eksbuild.1
+            clusterNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+            resolveConflicts: OVERWRITE
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-csi-%s"
+        - type: FromCompositeFieldPath
+          fromFieldPath: status.roleArnCSI
+          toFieldPath: spec.forProvider.serviceAccountRoleARN
+          policy:
+            fromFieldPath: Required
     # Crossplane Kubernetes ProviderConfig for this EKS Cluster
     - name: eks-k8s-provider-config
       base:

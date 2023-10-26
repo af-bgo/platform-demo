@@ -76,7 +76,7 @@ spec:
                     desiredSize:
                       type: integer
                       description: Nodegroup desiredSize.
-                      default: 2
+                      default: 3
                     maxSize:
                       type: integer
                       description: Nodegroup maxSize.
@@ -90,7 +90,7 @@ spec:
                         - AL2_ARM_64
                         - BOTTLEROCKET_x86_64
                         - BOTTLEROCKET_ARM_64
-                      default: AL2_x86_64_GPU
+                      default: AL2_x86_64
                     capacityType:
                       type: string
                       description: Capacity Type.
