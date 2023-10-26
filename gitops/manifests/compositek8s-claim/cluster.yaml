@@ -3,7 +3,7 @@ kind: CompositeKubernetesCluster
 metadata:
   name: dev
   labels:
-    cluster-owner: vfarcic
+    cluster-owner: af-bgo
 spec:
   compositionRef:
     # Possible values cluster-google, cluster-azure, cluster-aws
