@@ -1,0 +1,9 @@
+resources:
+  - ebsCSI/definition.yaml
+  - ebsCSI/composition.yaml
+  - cluster/composition.yaml
+  - cluster/definition.yaml
+  - k8s/definition.yaml
+  - k8s/composition.yaml
+  - network/definition.yaml
+  - network/composition.yaml
