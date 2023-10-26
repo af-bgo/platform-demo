@@ -35,6 +35,8 @@ spec:
     endpointPrivateAccess: false
     endpointPublicAccess: true
   managedNodeGroups:
-    minSize: 1
+    minSize: 2
+    desiredSize: 2
+    maxSize: 5
   writeConnectionSecretToRef:
     name: xplane-eks-cluster-cas
