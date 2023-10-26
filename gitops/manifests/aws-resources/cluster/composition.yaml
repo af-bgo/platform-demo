@@ -13,7 +13,7 @@ spec:
         kind: XNetwork
         spec:
           providerConfig:
-            aws: default #<<<< Change this to match the name of your aws provider config
+            aws: config-aws
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.id
@@ -37,7 +37,7 @@ spec:
         kind: XK8s
         spec:
           providerConfig:
-            aws: default #<<<< Change this to match the name of your aws provider config
+            aws: config-aws
       patches:
         - fromFieldPath: spec.id
           toFieldPath: spec.id
