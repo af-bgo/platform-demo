@@ -2,14 +2,14 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
-  name: provider-config-aws
+    argocd.argoproj.io/sync-wave: "2"
+  name: k8s-providers
   namespace: argocd
 spec:
   source:
     repoURL: 'https://github.com/af-bgo/platform-demo.git'
     targetRevision: main
-    path: "gitops/manifests/provider-config-aws"
+    path: "gitops/manifests/k8s-providers"
   destination:
     namespace: argocd
     server: 'https://kubernetes.default.svc'
