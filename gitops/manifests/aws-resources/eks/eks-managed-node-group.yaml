@@ -175,7 +175,7 @@ spec:
               maxSize:
             capacityType:
             instanceTypes:
-              - m5.large
+              - t4g.medium
       patches:
         - type: PatchSet
           patchSetName: common-parameters

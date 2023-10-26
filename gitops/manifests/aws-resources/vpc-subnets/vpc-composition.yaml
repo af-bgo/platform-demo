@@ -29,9 +29,9 @@ spec:
         - type: FromCompositeFieldPath
           fromFieldPath: spec.resourceConfig.region
           toFieldPath: spec.forProvider.region
-  #        - type: FromCompositeFieldPath
-  #          fromFieldPath: spec.resourceConfig.name
-  #          toFieldPath: metadata.annotations[crossplane.io/external-name]
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.resourceConfig.name
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
 
   resources:
     - name: vpc
