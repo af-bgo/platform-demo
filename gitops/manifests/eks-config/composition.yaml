@@ -13,6 +13,9 @@ spec:
     apiVersion: eks.sarathy.io/v1beta1
     kind: EKSCluster
 
+  providerConfigRef:
+    name: config-aws
+
   patchSets:
     - name: common-parameters
       patches:
