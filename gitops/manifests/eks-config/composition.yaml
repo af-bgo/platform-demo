@@ -475,7 +475,7 @@ spec:
               matchLabels:
                 role: controlplane
             resourcesVpcConfig:
-              endpointPrivateAccess: false
+              endpointPrivateAccess: true
               endpointPublicAccess: true
               subnetIdSelector:
                 matchLabels:
