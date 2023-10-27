@@ -36,5 +36,8 @@ spec:
   compositionRef:
     name: amazon-eks-cluster
 
+  providerConfigRef:
+    name: config-aws
+
   writeConnectionSecretToRef:
     name: crossplane-cluster-connection
