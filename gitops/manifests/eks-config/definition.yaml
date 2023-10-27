@@ -90,14 +90,6 @@ spec:
                       type: string
                       enum: ["gpu", "non-gpu"]
 
-                    capacityType:
-                      type: string
-                      description: Capacity Type.
-                      enum:
-                        - ON_DEMAND
-                        - SPOT
-                      default: SPOT
-
                   required:
                     - region
                     - vpc-name
