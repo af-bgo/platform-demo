@@ -114,7 +114,5 @@ spec:
                     - k8s-version
                     - workers-size
                     - workload-type
-                    - cluster-role
-                    - workernode-role
               required:
                 - parameters
