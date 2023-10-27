@@ -1,90 +1,22 @@
-## Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
-## SPDX-License-Identifier: Apache-2.0
-#
-##----------------------------------------------------------------------------------
-## This example resource creates the following resources
-##     1. EKS Cluster with VPC
-##     2. EKS Cluster IAM Role
-##     3. Attaches EKS Cluster Policies to the IAM Role
-##     4. EKS Managed Node group
-##     5. IAM Role for EKS Managed Node group
-##     6. Attaches EKS Managed Node Policies to the IAM Role
-##     7. Update the aws-auth config map to allow admin access (defaults to Admin role)
-##     8. Installs Cluster Auto Scaler with proper roles.
-##----------------------------------------------------------------------------------
-#---
-#apiVersion: cluster.awsblueprints.io/v1alpha1
-#kind: amazonEks
-#metadata:
-#  name: istio-cluster
-#  namespace: default
-#spec:
-#  compositionSelector:
-#    matchLabels:
-#      awsblueprints.io/provider: aws
-#      awsblueprints.io/environment: dev
-#      awsblueprints.io/subnet-selection: label
-#      service: eks-cas
-#  resourceConfig:
-#    providerConfigName: config-aws
-#    region: eu-west-1
-#  parameters:
-#    # This field tells which role should have admin access to this cluster.
-#    adminRole: Admin
-#    version: "1.28"
-#    endpointPrivateAccess: false
-#    endpointPublicAccess: true
-#  managedNodeGroups:
-#    minSize: 2
-#  writeConnectionSecretToRef:
-#    name: xplane-eks-cluster-cas
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: Apache-2.0
 
----
-apiVersion: network.awsblueprints.io/v1alpha1
-kind: vpcSubnet
-metadata:
-  name: xplane-vpc-subnets
-  namespace: default
-spec:
-  compositionSelector:
-    matchLabels:
-      awsblueprints.io/provider: aws
-      awsblueprints.io/environment: dev
-      awsblueprints.io/network-id: "true"
-      service: vpcsubnet
-  resourceConfig:
-    providerConfigName: config-aws
-    region: eu-west-1
-  # networkId is propagated to subnet label 'network.awsblueprints.io/network-id'
-  networkId: dev-net
-  parameters:
-    #vpc input
-    vpc-Name: xplane-vpc
-    vpc-cidrBlock: "10.20.0.0/17"   # 32768 IPs
-    vpc-amazonProvidedIpv6CidrBlock: false
-    #public subnet1
-    publicSubnet1-cidrBlock: "10.20.0.0/21" # 2048 IPs
-    publicSubnet1-availabilityZone: eu-west-1a
-    #public subnet2
-    publicSubnet2-cidrBlock: "10.20.8.0/21" # 2048 IPs
-    publicSubnet2-availabilityZone: eu-west-1b
-    #public subnet3
-    publicSubnet3-cidrBlock: "10.20.16.0/21" # 2048 IPs
-    publicSubnet3-availabilityZone: eu-west-1c
-    #private subnet1
-    privateSubnet1-cidrBlock: "10.20.64.0/21" # 2048 IPs
-    privateSubnet1-availabilityZone: eu-west-1a
-    #private subnet2
-    privateSubnet2-cidrBlock: "10.20.72.0/21" # 2048 IPs
-    privateSubnet2-availabilityZone: eu-west-1b
-    #private subnet3
-    privateSubnet3-cidrBlock: "10.20.80.0/21" # 2048 IPs
-    privateSubnet3-availabilityZone: eu-west-1c
+#----------------------------------------------------------------------------------
+# This example resource creates the following resources
+#     1. EKS Cluster with VPC
+#     2. EKS Cluster IAM Role
+#     3. Attaches EKS Cluster Policies to the IAM Role
+#     4. EKS Managed Node group
+#     5. IAM Role for EKS Managed Node group
+#     6. Attaches EKS Managed Node Policies to the IAM Role
+#     7. Update the aws-auth config map to allow admin access (defaults to Admin role)
+#     8. Installs Cluster Auto Scaler with proper roles.
+#----------------------------------------------------------------------------------
 ---
 apiVersion: cluster.awsblueprints.io/v1alpha1
 kind: amazonEks
 metadata:
-  name: xplane-eks-cluster
+  name: istio-cluster
   namespace: default
 spec:
   compositionSelector:
@@ -92,20 +24,19 @@ spec:
       awsblueprints.io/provider: aws
       awsblueprints.io/environment: dev
       awsblueprints.io/subnet-selection: label
-      service: eks
+      service: eks-cas
   resourceConfig:
     providerConfigName: config-aws
-    region: eu-west-1
+    region: eu-north-1
   parameters:
-    #EKS Input parameters
+    # This field tells which role should have admin access to this cluster.
+    adminRole: Admin
     version: "1.28"
     endpointPrivateAccess: false
     endpointPublicAccess: true
-    # networkId is used to select subnets through label 'network.awsblueprints.io/network-id'
-    networkId: dev-net
   managedNodeGroups:
-    minSize: 2
-    desiredSize: 2
-    maxSize: 2
+    minSize: 1
+    desiredSize: 1
+    maxSize: 5
   writeConnectionSecretToRef:
-    name: xplane-eks-cluster
+    name: xplane-eks-cluster-cas
