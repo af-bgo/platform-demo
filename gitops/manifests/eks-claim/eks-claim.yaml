@@ -94,7 +94,7 @@ spec:
       awsblueprints.io/subnet-selection: label
       service: eks
   resourceConfig:
-    providerConfigName: sandbox-account
+    providerConfigName: config-aws
     region: eu-west-1
   parameters:
     #EKS Input parameters
