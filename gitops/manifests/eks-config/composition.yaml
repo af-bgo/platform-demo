@@ -544,10 +544,17 @@ spec:
       base:
         apiVersion: eks.aws.crossplane.io/v1beta1
         kind: Cluster
+        metadata:
+          labels:
+            role: controlplane
         spec:
           providerConfigRef:
             name: config-aws
           forProvider:
+            roleArnSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
             resourcesVpcConfig:
               endpointPrivateAccess: false
               endpointPublicAccess: true
@@ -567,8 +574,6 @@ spec:
             - type: string
               string:
                 fmt: "%s-ekscluster-connection"
-        - fromFieldPath: "spec.parameters.cluster-role"
-          toFieldPath: "spec.forProvider.roleArn"
       connectionDetails:
         - name: cluster-ca
           fromConnectionSecretKey: clusterCA
@@ -595,6 +600,12 @@ spec:
                 visibility: private
             clusterNameSelector:
               matchControllerRef: true
+              matchLabels:
+                role: controlplane
+            nodeRoleSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
       patches:
         - type: PatchSet
           patchSetName: common-parameters
@@ -609,8 +620,6 @@ spec:
               map:
                 gpu: AL2_x86_64_GPU
                 non-gpu: AL2_x86_64
-        - fromFieldPath: "spec.parameters.workernode-role"
-          toFieldPath: "spec.forProvider.nodeRole"
 
     - name: eks-managed-nodegroup-iam-role
       base:
