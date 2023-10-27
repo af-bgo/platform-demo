@@ -463,10 +463,17 @@ spec:
       base:
         apiVersion: eks.aws.crossplane.io/v1beta1
         kind: Cluster
+        metadata:
+          labels:
+            role: controlplane
         spec:
           providerConfigRef:
             name: config-aws
           forProvider:
+            roleArnSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
             resourcesVpcConfig:
               endpointPrivateAccess: false
               endpointPublicAccess: true
@@ -486,8 +493,7 @@ spec:
             - type: string
               string:
                 fmt: "%s-ekscluster-connection"
-        - fromFieldPath: "spec.parameters.cluster-role"
-          toFieldPath: "spec.forProvider.roleArn"
+
       connectionDetails:
         - name: cluster-ca
           fromConnectionSecretKey: clusterCA
@@ -495,6 +501,81 @@ spec:
           fromConnectionSecretKey: endpoint
         - name: value
           fromConnectionSecretKey: kubeconfig
+
+    - name: eks-cluster-role
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: Role
+        metadata:
+          labels:
+            role: controlplane
+        spec:
+          forProvider:
+            assumeRolePolicyDocument: |
+              {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "eks.amazonaws.com"
+                            ]
+                        },
+                        "Action": [
+                            "sts:AssumeRole"
+                        ]
+                    }
+                ]
+              }
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-cluster-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-service-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-vpcresource-controller-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
 
     - name: eks-nodegroup
       base:
@@ -514,6 +595,12 @@ spec:
                 visibility: private
             clusterNameSelector:
               matchControllerRef: true
+              matchLabels:
+                role: controlplane
+            nodeRoleSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
       patches:
         - type: PatchSet
           patchSetName: common-parameters
@@ -528,5 +615,93 @@ spec:
               map:
                 gpu: AL2_x86_64_GPU
                 non-gpu: AL2_x86_64
-        - fromFieldPath: "spec.parameters.workernode-role"
-          toFieldPath: "spec.forProvider.nodeRole"
+
+    - name: eks-managed-nodegroup-iam-role
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: Role
+        metadata:
+          labels:
+            role: managed-nodegroup
+        spec:
+          forProvider:
+            assumeRolePolicyDocument: |
+              {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Effect": "Allow",
+                        "Principal": {
+                            "Service": [
+                                "ec2.amazonaws.com"
+                            ]
+                        },
+                        "Action": [
+                            "sts:AssumeRole"
+                        ]
+                    }
+                ]
+              }
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-managed-nodegroup-worker-node-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-managed-nodegroup-container-registry-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-managed-nodegroup-ssm-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+
+    - name: eks-managed-nodegroup-cni-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters

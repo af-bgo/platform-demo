@@ -29,9 +29,6 @@ spec:
     workload-type: "non-gpu"
     workers-size: 2
 
-    cluster-role: arn:aws:iam::441744095962:role/EKSCluster
-    workernode-role: arn:aws:iam::441744095962:role/EKSCluster
-
   compositionRef:
     name: amazon-eks-cluster
 
