@@ -28,6 +28,8 @@ spec:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: VPC
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             enableDnsSupport: true
             enableDnsHostNames: true
@@ -49,6 +51,8 @@ spec:
           labels:
             type: igw
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
@@ -77,6 +81,8 @@ spec:
             type: subnet
             visibility: public
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             mapPublicIpOnLaunch: true
             vpcIdSelector:
@@ -115,6 +121,8 @@ spec:
             type: subnet
             visibility: public
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             mapPublicIpOnLaunch: true
             vpcIdSelector:
@@ -153,6 +161,8 @@ spec:
             type: subnet
             visibility: private
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             mapPublicIpOnLaunch: false
             vpcIdSelector:
@@ -191,6 +201,8 @@ spec:
             type: subnet
             visibility: private
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             mapPublicIpOnLaunch: false
             vpcIdSelector:
@@ -228,6 +240,8 @@ spec:
           labels:
             type: eip-1
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             domain: vpc
       patches:
@@ -242,6 +256,8 @@ spec:
           labels:
             type: eip-2
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             domain: vpc
       patches:
@@ -256,6 +272,8 @@ spec:
           labels:
             type: natgw-1
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             allocationIdSelector:
               matchLabels:
@@ -292,6 +310,8 @@ spec:
           labels:
             type: natgw-2
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             allocationIdSelector:
               matchLabels:
@@ -325,6 +345,8 @@ spec:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: RouteTable
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
@@ -367,6 +389,8 @@ spec:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: RouteTable
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
@@ -403,6 +427,8 @@ spec:
         apiVersion: ec2.aws.crossplane.io/v1beta1
         kind: RouteTable
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             vpcIdSelector:
               matchControllerRef: true
@@ -439,6 +465,8 @@ spec:
         apiVersion: eks.aws.crossplane.io/v1beta1
         kind: Cluster
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             resourcesVpcConfig:
               endpointPrivateAccess: false
@@ -474,6 +502,8 @@ spec:
         apiVersion: eks.aws.crossplane.io/v1alpha1
         kind: NodeGroup
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             instanceTypes:
               - t3.small
