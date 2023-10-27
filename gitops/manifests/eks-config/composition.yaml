@@ -491,54 +491,110 @@ spec:
       patches:
         - type: PatchSet
           patchSetName: common-parameters
-        - name: eks-cluster-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: controlplane
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
-        - name: eks-service-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: controlplane
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
-        - name: eks-vpcresource-controller-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: controlplane
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "control-plane-%s"
+
+    - name: eks-cluster-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-cluster-policy-%s"
+
+    - name: eks-service-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-service-policy-%s"
+
+    - name: eks-vpcresource-controller-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: controlplane
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-vpc-policy-%s"
+
+    - name: eks-oidc
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: OpenIDConnectProvider
+        spec:
+          forProvider:
+            clientIDList:
+              - sts.amazonaws.com
+            thumbprintList:
+              - "9e99a48a9960b14926bb7f3b02e22da2b0ab7280"
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - fromFieldPath: status.oidcIssuerUrl
+          toFieldPath: spec.forProvider.url
+          policy:
+            fromFieldPath: Required
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "oidc-provider-%s"
 
     - name: eks-cluster
       base:
@@ -574,6 +630,27 @@ spec:
             - type: string
               string:
                 fmt: "%s-ekscluster-connection"
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.identity.oidc.issuer
+          toFieldPath: status.oidcIssuerUrl
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+        - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.resourcesVpcConfig.subnetIdSelector.matchLabels[crossplane.io/claim-name]
+          policy:
+            fromFieldPath: Required
+        - type: ToCompositeFieldPath
+          fromFieldPath: metadata.name
+          toFieldPath: status.clusterName
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.identity.oidc.issuer
+          toFieldPath: status.oidcEKS
+          transforms:
+            - type: string
+              string:
+                type: TrimPrefix
+                trim: 'https://'
       connectionDetails:
         - name: cluster-ca
           fromConnectionSecretKey: clusterCA
@@ -620,6 +697,10 @@ spec:
               map:
                 gpu: AL2_x86_64_GPU
                 non-gpu: AL2_x86_64
+        - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.forProvider.subnetSelector.matchLabels[crossplane.io/claim-name]
+          policy:
+            fromFieldPath: Required
 
     - name: eks-managed-nodegroup-iam-role
       base:
@@ -650,67 +731,119 @@ spec:
       patches:
         - type: PatchSet
           patchSetName: common-parameters
-        - name: eks-managed-nodegroup-worker-node-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: managed-nodegroup
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
-        - name: eks-managed-nodegroup-container-registry-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: managed-nodegroup
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
-        - name: eks-managed-nodegroup-ssm-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: managed-nodegroup
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
-        - name: eks-managed-nodegroup-cni-policy
-          base:
-            apiVersion: iam.aws.crossplane.io/v1beta1
-            kind: RolePolicyAttachment
-            spec:
-              providerConfigRef:
-                name: config-aws
-              forProvider:
-                policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-                roleNameSelector:
-                  matchControllerRef: true
-                  matchLabels:
-                    role: managed-nodegroup
-          patches:
-            - type: PatchSet
-              patchSetName: common-parameters
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.arn
+          toFieldPath: status.accountID
+          transforms:
+            - type: string
+              string:
+                type: Regexp
+                regexp:
+                  match: 'arn:aws:iam::(\d+):.*'
+                  group: 1
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.atProvider.arn
+          toFieldPath: status.nodeGroupArn
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "managed-node-%s"
+
+    - name: eks-managed-nodegroup-worker-node-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-ng-%s"
+
+    - name: eks-managed-nodegroup-container-registry-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-ecr-%s"
+
+    - name: eks-managed-nodegroup-ssm-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-ssm-%s"
+
+    - name: eks-managed-nodegroup-cni-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          providerConfigRef:
+            name: config-aws
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-worker-cni-%s"

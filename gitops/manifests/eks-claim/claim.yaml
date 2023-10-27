@@ -25,9 +25,6 @@ spec:
     subnet2-private-cidrBlock: "192.168.51.0/24"
     subnet2-private-availabilityZone: "eu-north-1b"
 
-    cluster-role: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
-    workernode-role: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-
     k8s-version: "1.27"
     workload-type: "non-gpu"
     workers-size: 2
