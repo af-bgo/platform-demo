@@ -510,6 +510,8 @@ spec:
           labels:
             role: controlplane
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             assumeRolePolicyDocument: |
               {
@@ -537,6 +539,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
             roleNameSelector:
@@ -552,6 +556,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
             roleNameSelector:
@@ -567,6 +573,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSVPCResourceController
             roleNameSelector:
@@ -624,6 +632,8 @@ spec:
           labels:
             role: managed-nodegroup
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             assumeRolePolicyDocument: |
               {
@@ -651,6 +661,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
             roleNameSelector:
@@ -666,6 +678,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
             roleNameSelector:
@@ -681,6 +695,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
             roleNameSelector:
@@ -696,6 +712,8 @@ spec:
         apiVersion: iam.aws.crossplane.io/v1beta1
         kind: RolePolicyAttachment
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             policyArn: arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
             roleNameSelector:
