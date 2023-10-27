@@ -561,12 +561,14 @@ spec:
           patchSetName: common-parameters
         - fromFieldPath: "spec.parameters.k8s-version"
           toFieldPath: "spec.forProvider.version"
-        - fromFieldPath: metadata.uid
+        - fromFieldPath: "metadata.uid"
           toFieldPath: "spec.writeConnectionSecretToRef.name"
           transforms:
             - type: string
               string:
                 fmt: "%s-ekscluster-connection"
+        - fromFieldPath: "spec.parameters.cluster-role"
+          toFieldPath: "spec.forProvider.roleArn"
       connectionDetails:
         - name: cluster-ca
           fromConnectionSecretKey: clusterCA
@@ -607,6 +609,8 @@ spec:
               map:
                 gpu: AL2_x86_64_GPU
                 non-gpu: AL2_x86_64
+        - fromFieldPath: "spec.parameters.workernode-role"
+          toFieldPath: "spec.forProvider.nodeRole"
 
     - name: eks-managed-nodegroup-iam-role
       base:
