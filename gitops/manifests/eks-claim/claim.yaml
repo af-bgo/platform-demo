@@ -24,9 +24,6 @@ spec:
     subnet2-private-name: "PRIVATE-WORKER-2"
     subnet2-private-cidrBlock: "192.168.51.0/24"
     subnet2-private-availabilityZone: "eu-north-1b"
-    
-    cluster-role: arn:aws:iam::XXXX:role/EKS-Cluster-Role
-    workernode-role: arn:aws:iam::XXXX:role/EKS-WorkerNode-Role
 
     k8s-version: "1.27"
     workload-type: "non-gpu"
