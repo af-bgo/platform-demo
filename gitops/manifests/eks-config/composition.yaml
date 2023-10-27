@@ -583,7 +583,6 @@ spec:
           providerConfigRef:
             name: config-aws
           forProvider:
-            capacityType: Spot
             instanceTypes:
               - t3.small
             scalingConfig:
