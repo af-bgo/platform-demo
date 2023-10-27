@@ -3,7 +3,6 @@ apiVersion: eks.sarathy.io/v1beta1
 kind: EKSCluster
 metadata:
   name: crossplane-cluster
-  namespace: argocd
 spec:
   parameters:
     region: eu-north-1
@@ -40,4 +39,5 @@ spec:
     name: config-aws
 
   writeConnectionSecretToRef:
+    namespace: default
     name: crossplane-cluster-connection
