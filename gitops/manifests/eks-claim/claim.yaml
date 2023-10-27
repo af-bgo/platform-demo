@@ -2,36 +2,39 @@
 apiVersion: eks.sarathy.io/v1beta1
 kind: EKSCluster
 metadata:
-  name: crossplane-cluster
+  name: istio-cluster
 spec:
   parameters:
     region: eu-north-1
-    vpc-name: "EKS-CROSSPLANE-VPC"
-    vpc-cidrBlock: "192.168.48.0/20"
+    vpc-name: "istio-vpc"
+    vpc-cidrBlock: "10.20.0.0/16"
 
-    subnet1-public-name: "PUBLIC-WORKER-1"
-    subnet1-public-cidrBlock: "192.168.48.0/24"
+    subnet1-public-name: "public-worker-1 "
+    subnet1-public-cidrBlock: "10.20.1.0/28"
     subnet1-public-availabilityZone: "eu-north-1a"
     
-    subnet2-public-name: "PUBLIC-WORKER-2"
-    subnet2-public-cidrBlock: "192.168.49.0/24"
+    subnet2-public-name: "public-worker-2"
+    subnet2-public-cidrBlock: "10.20.2.0/28"
     subnet2-public-availabilityZone: "eu-north-1b"
     
-    subnet1-private-name: "PRIVATE-WORKER-1"
-    subnet1-private-cidrBlock: "192.168.50.0/24"
+    subnet1-private-name: "private-worker-1 "
+    subnet1-private-cidrBlock: "10.20.11.0/28"
     subnet1-private-availabilityZone: "eu-north-1a"
     
-    subnet2-private-name: "PRIVATE-WORKER-2"
-    subnet2-private-cidrBlock: "192.168.51.0/24"
+    subnet2-private-name: "private-worker-2"
+    subnet2-private-cidrBlock: "10.20.12.0/28"
     subnet2-private-availabilityZone: "eu-north-1b"
 
     k8s-version: "1.27"
     workload-type: "non-gpu"
     workers-size: 2
 
+    cluster-role: arn:aws:iam::441744095962:role/EKSCluster
+    workernode-role: arn:aws:iam::441744095962:role/EKSCluster
+
   compositionRef:
     name: amazon-eks-cluster
 
   writeConnectionSecretToRef:
-    namespace: default
-    name: crossplane-cluster-connection
+    namespace: istio
+    name: istio-cluster-connection

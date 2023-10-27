@@ -29,7 +29,7 @@ spec:
                     region:
                       description: Geographic location of this VPC
                       type: string
-                      enum: ["eu-north-1", "eu-central-1"]
+                      enum: ["eu-north-1", "eu-central-1", "eu-west-1"]
 
                     vpc-cidrBlock:
                       description: CIDR block for VPC
@@ -78,10 +78,12 @@ spec:
                       description: AZ for private subnet 2
                       type: string
 
-                    adminRole:
-                      description: Name of the role in the same account to give administrator access to this cluster.
+                    cluster-role:
+                      description: EKS cluster role
                       type: string
-                      default: Admin
+                    workernode-role:
+                      description: EKS worker node role
+                      type: string
 
                     k8s-version:
                       description: Kubernetes version
@@ -94,6 +96,14 @@ spec:
                       description: Type of workloads to be run on this cluster (GPU or non-GPU)"
                       type: string
                       enum: ["gpu", "non-gpu"]
+
+                    capacityType:
+                      type: string
+                      description: Capacity Type.
+                      enum:
+                        - ON_DEMAND
+                        - SPOT
+                      default: SPOT
 
                   required:
                     - region
