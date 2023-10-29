@@ -187,7 +187,7 @@ spec:
             role: controlplane
         spec:
           forProvider:
-            passRolePolicyDocument: |
+            assumeRolePolicyDocument: |
               {
                 "Version": "2012-10-17",
                 "Statement": [
@@ -199,7 +199,7 @@ spec:
                             ]
                         },
                         "Action": [
-                            "sts:PassRole"
+                            "sts:AssumeRole"
                         ]
                     }
                 ]
@@ -355,7 +355,7 @@ spec:
             role: managed-nodegroup
         spec:
           forProvider:
-            passRolePolicyDocument: |
+            assumeRolePolicyDocument: |
               {
                 "Version": "2012-10-17",
                 "Statement": [
@@ -367,7 +367,7 @@ spec:
                             ]
                         },
                         "Action": [
-                            "sts:PassRole"
+                            "sts:AssumeRole"
                         ]
                     }
                 ]
@@ -683,7 +683,7 @@ spec:
                    "Principal": {
                      "Federated": "arn:aws:iam::%s:oidc-provider/%s"
                    },
-                 "Action": "sts:PassRoleWithWebIdentity",
+                 "Action": "sts:AssumeRoleWithWebIdentity",
                  "Condition": {
                    "StringEquals": {
                    "%s:aud": "sts.amazonaws.com",
@@ -692,7 +692,7 @@ spec:
                                }
                      }]
                 }
-          toFieldPath: spec.forProvider.passRolePolicyDocument
+          toFieldPath: spec.forProvider.assumeRolePolicyDocument
           policy:
             fromFieldPath: Required
         - type: CombineFromComposite
