@@ -12,7 +12,7 @@ spec:
     name: config-aws
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: eks.sarathy.io/v1beta1
+    apiVersion: eks.appsfactory.de/v1beta1
     kind: EKSCluster
 
   patchSets:

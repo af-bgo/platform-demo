@@ -1,5 +1,5 @@
 ---
-apiVersion: eks.sarathy.io/v1beta1
+apiVersion: eks.appsfactory.de/v1beta1
 kind: EKSCluster
 metadata:
   name: istio-cluster

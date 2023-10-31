@@ -2,9 +2,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: eksclusters.eks.sarathy.io
+  name: eksclusters.eks.appsfactory.de
 spec:
-  group: eks.sarathy.io
+  group: eks.appsfactory.de
   names:
     kind: EKSCluster
     plural: eksclusters
