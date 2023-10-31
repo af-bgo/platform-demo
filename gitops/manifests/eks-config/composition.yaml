@@ -586,7 +586,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+              - fromFieldPath: spec.parameters.vpc-name
             strategy: string
             string:
               fmt: "%s-cluster-role"
@@ -619,7 +619,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+              - fromFieldPath: spec.parameters.vpc-name
             strategy: string
             string:
               fmt: "%s-cluster-role-binding"
