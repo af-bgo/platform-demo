@@ -8,6 +8,9 @@ spec:
   names:
     kind: EKSCluster
     plural: eksclusters
+  claimNames:
+    kind: EKSCluster
+    plural: eksclusters
   connectionSecretKeys:
     - cluster-ca
     - apiserver-endpoint

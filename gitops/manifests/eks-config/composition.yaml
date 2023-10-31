@@ -7,6 +7,7 @@ metadata:
     provider: aws
     service: eks
     compute: managed
+    crossplane.io/xrd: eksclusters.eks.appsfactory.de
 spec:
   providerConfigRef:
     name: config-aws

@@ -4,6 +4,11 @@ kind: EKSCluster
 metadata:
   name: istio-cluster
 spec:
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      service: eks
+      compute: managed
   parameters:
     region: eu-north-1
     vpc-name: "istio-vpc"
