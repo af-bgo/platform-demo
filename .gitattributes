@@ -1,1 +1,0 @@
-gitops/manifests/eks-claim/claim.yaml filter=git-crypt diff=git-crypt
