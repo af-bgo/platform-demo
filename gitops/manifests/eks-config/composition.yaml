@@ -586,7 +586,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: spec.parameters.cluster-name
+              - fromFieldPath: spec.parameters.name
             strategy: string
             string:
               fmt: "%s-cluster-role"
@@ -619,7 +619,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: spec.parameters.cluster-name
+              - fromFieldPath: spec.parameters.name
             strategy: string
             string:
               fmt: "%s-cluster-role-binding"

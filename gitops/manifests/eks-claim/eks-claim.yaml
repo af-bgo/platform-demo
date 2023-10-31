@@ -5,6 +5,7 @@ metadata:
   name: istio-cluster
 spec:
   parameters:
+    name: "istio"
     region: eu-north-1
     vpc-name: "istio-vpc"
     vpc-cidrBlock: "10.20.0.0/16"
@@ -27,8 +28,6 @@ spec:
 
     cluster-role: arn:aws:iam::441744095962:role/EKSCluster
     workernode-role: arn:aws:iam::441744095962:role/EKSCluster
-
-    cluster-name: istio
 
     k8s-version: "1.28"
     workload-type: "non-gpu"
