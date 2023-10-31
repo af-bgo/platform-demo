@@ -29,7 +29,6 @@ spec:
     workernode-role: arn:aws:iam::441744095962:role/EKSCluster
 
     cluster-name: istio
-    providerConfigName: config-aws
 
     k8s-version: "1.28"
     workload-type: "non-gpu"

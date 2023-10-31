@@ -20,12 +20,6 @@ spec:
       patches:
         - fromFieldPath: "spec.parameters.region"
           toFieldPath: "spec.forProvider.region"
-    - name: k8s-config
-      patches:
-        - fromFieldPath: spec.parameters.providerConfigName
-          toFieldPath: spec.providerConfigRef.name
-          policy:
-            fromFieldPath: Required
   resources:
     - name: vpc
       base:
@@ -535,7 +529,7 @@ spec:
         - fromFieldPath: "spec.parameters.workernode-role"
           toFieldPath: "spec.forProvider.nodeRole"
 
-    - name: cas-cluster-role
+    - name: eks-cluster-role
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
@@ -589,8 +583,6 @@ spec:
                   resources: [ "leases" ]
                   verbs: [ "get", "update" ]
       patches:
-        - type: PatchSet
-          patchSetName: k8s-config
         - type: CombineFromComposite
           combine:
             variables:
@@ -602,11 +594,13 @@ spec:
           policy:
             fromFieldPath: Required
 
-    - name: cas-cluster-role-binding
+    - name: eks-cluster-role-binding
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          providerConfigRef:
+            name: config-aws
           forProvider:
             manifest:
               apiVersion: rbac.authorization.k8s.io/v1
@@ -622,8 +616,6 @@ spec:
                   name: eks-console-dashboard-full-access-group
                   apiGroup: rbac.authorization.k8s.io
       patches:
-        - type: PatchSet
-          patchSetName: k8s-config
         - type: CombineFromComposite
           combine:
             variables:
