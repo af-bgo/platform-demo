@@ -28,7 +28,6 @@ spec:
     cluster-role: arn:aws:iam::441744095962:role/EKSCluster
     workernode-role: arn:aws:iam::441744095962:role/EKSCluster
 
-    capacityType: SPOT
 
     k8s-version: "1.28"
     workload-type: "non-gpu"
