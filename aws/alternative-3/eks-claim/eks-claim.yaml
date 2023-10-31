@@ -3,6 +3,7 @@ apiVersion: eks.appsfactory.de/v1beta1
 kind: EKSCluster
 metadata:
   name: istio-cluster
+  namespace: default
 spec:
   compositionSelector:
     matchLabels:

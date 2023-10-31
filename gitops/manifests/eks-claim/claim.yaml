@@ -31,12 +31,12 @@ spec:
   parameters:
     # This field tells which role should have admin access to this cluster.
     adminRole: EKSCluster
-    version: "1.27"
+    version: "1.28"
     endpointPrivateAccess: false
     endpointPublicAccess: true
   managedNodeGroups:
     minSize: 1
-    desiredSie: 1
+    desiredSize: 2
     maxSize: 5
   writeConnectionSecretToRef:
     name: xplane-eks-cluster-cas

@@ -7,6 +7,7 @@ metadata:
     provider: aws
     service: eks
     compute: managed
+    crossplane.io/xrd: eksclusters.eks.appsfactory.de
 spec:
   providerConfigRef:
     name: config-aws
@@ -20,6 +21,12 @@ spec:
       patches:
         - fromFieldPath: "spec.parameters.region"
           toFieldPath: "spec.forProvider.region"
+    - name: k8s-config
+      patches:
+        - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: spec.providerConfigRef.name
+          policy:
+            fromFieldPath: Required
   resources:
     - name: vpc
       base:
@@ -586,7 +593,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: spec.parameters.vpc-name
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
             strategy: string
             string:
               fmt: "%s-cluster-role"
@@ -619,7 +626,7 @@ spec:
         - type: CombineFromComposite
           combine:
             variables:
-              - fromFieldPath: spec.parameters.vpc-name
+              - fromFieldPath: metadata.labels[crossplane.io/claim-name]
             strategy: string
             string:
               fmt: "%s-cluster-role-binding"
