@@ -504,7 +504,6 @@ spec:
           providerConfigRef:
             name: config-aws
           forProvider:
-            capacityType:
             instanceTypes:
               - t3.small
             scalingConfig:
@@ -522,8 +521,6 @@ spec:
           toFieldPath: "spec.forProvider.scalingConfig.desiredSize"
         - fromFieldPath: "spec.parameters.workers-size"
           toFieldPath: "spec.forProvider.scalingConfig.maxSize"
-        - fromFieldPath: spec.parameters.capacityType
-          toFieldPath: spec.forProvider.capacityType
         - fromFieldPath: "spec.parameters.workload-type"
           toFieldPath: "spec.forProvider.amiType"
           transforms:

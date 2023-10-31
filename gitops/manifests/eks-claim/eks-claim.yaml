@@ -5,29 +5,28 @@ metadata:
   name: istio-cluster
 spec:
   parameters:
-    region: eu-central-1
+    region: eu-north-1
     vpc-name: "istio-vpc"
     vpc-cidrBlock: "10.20.0.0/16"
 
     subnet1-public-name: "public-worker-1 "
     subnet1-public-cidrBlock: "10.20.1.0/28"
-    subnet1-public-availabilityZone: "eu-central-1a"
+    subnet1-public-availabilityZone: "eu-north-1a"
     
     subnet2-public-name: "public-worker-2"
     subnet2-public-cidrBlock: "10.20.2.0/28"
-    subnet2-public-availabilityZone: "eu-central-1b"
+    subnet2-public-availabilityZone: "eu-north-1b"
     
     subnet1-private-name: "private-worker-1 "
     subnet1-private-cidrBlock: "10.20.11.0/28"
-    subnet1-private-availabilityZone: "eu-central-1a"
+    subnet1-private-availabilityZone: "eu-north-1a"
     
     subnet2-private-name: "private-worker-2"
     subnet2-private-cidrBlock: "10.20.12.0/28"
-    subnet2-private-availabilityZone: "eu-central-1b"
+    subnet2-private-availabilityZone: "eu-north-1b"
 
     cluster-role: arn:aws:iam::441744095962:role/EKSCluster
     workernode-role: arn:aws:iam::441744095962:role/EKSCluster
-
 
     k8s-version: "1.28"
     workload-type: "non-gpu"
