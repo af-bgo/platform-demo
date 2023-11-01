@@ -551,36 +551,13 @@ spec:
                 name: cluster-role
               rules:
                 - apiGroups: [ "" ]
-                  resources: [
-                    "nodes",
-                    "namespaces"
-                    "pods",
-                    "configmaps",
-                    "endpoints",
-                    "events",
-                    "limitranges",
-                    "persistentvolumeclaims",
-                    "podtemplates",
-                    "replicationcontrollers",
-                    "resourcequotas",
-                    "secrets",
-                    "serviceaccounts",
-                    "services"
-                  ]
+                  resources: [ "nodes", "namespaces","pods", "configmaps", "endpoints", "events", "limitranges", "persistentvolumeclaims", "podtemplates", "replicationcontrollers", "resourcequotas", "secrets", "serviceaccounts", "services" ]
                   verbs: [ "get", "list" ]
                 - apiGroups: [ "apps" ]
-                  resources: [
-                    "deployments",
-                    "daemonsets",
-                    "statefulsets",
-                    "replicasets"
-                  ]
+                  resources: [ "deployments", "daemonsets", "statefulsets", "replicasets" ]
                   verbs: [ "get", "list" ]
                 - apiGroups: [ "batch" ]
-                  resources: [
-                    "jobs",
-                    "cronjobs"
-                  ]
+                  resources: [ "jobs", "cronjobs" ]
                   verbs: [ "get", "list" ]
                 - apiGroups: [ "coordination.k8s.io" ]
                   resources: [ "leases" ]
@@ -592,19 +569,13 @@ spec:
                   resources: [ "events" ]
                   verbs: [ "list", "get" ]
                 - apiGroups: [ "extensions" ]
-                  resources: [
-                    "daemonsets",
-                    "deployments",
-                    "ingresses",
-                    "networkpolicies",
-                    "replicasets"
-                  ]
+                  resources: [ "daemonsets", "deployments", "ingresses", "networkpolicies", "replicasets" ]
                   verbs: [ "get", "list" ]
                 - apiGroups: [ "networking.k8s.io" ]
                   resources: [ "ingresses", "networkpolicies" ]
                   verbs: [ "list", "get" ]
                 - apiGroups: [ "policy" ]
-                  resources: [ "poddisruptionbudgets"]
+                  resources: [ "poddisruptionbudgets" ]
                   verbs: [ "list", "get" ]
                 - apiGroups: [ "rbac.authorization.k8s.io" ]
                   resources: [ "rolebindings", "roles" ]
