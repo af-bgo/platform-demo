@@ -3,10 +3,5 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - vpc-subnet/definition.yaml
-  - vpc-subnet/vpc-composition-networkid.yaml
-  - vpc-subnet/vpc-composition.yaml
-  - eks/definition.yaml
-  - eks/eks-managed-node-group.yaml
-  - eks/eks-managed-node-group-subnet-labels.yaml
-  - eks/autoscaler.yaml
+  - definition.yaml
+  - composition.yaml
