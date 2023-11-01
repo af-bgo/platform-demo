@@ -541,6 +541,8 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          providerConfigRef:
+            name: ""
           forProvider:
             manifest:
               apiVersion: rbac.authorization.k8s.io/v1
@@ -598,6 +600,8 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          providerConfigRef:
+            name: ""
           forProvider:
             manifest:
               apiVersion: rbac.authorization.k8s.io/v1
