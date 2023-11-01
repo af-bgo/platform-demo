@@ -804,11 +804,11 @@ spec:
                             ],
                             "Resource": "*"
                       },
-                        {
-                          "Effect": "Allow",
-                          "Action": "ssm:GetParameter",
-                          "Resource": "arn:aws:ssm:*:%s:parameter/*"
-                        }
+                      {
+                        "Effect": "Allow",
+                        "Action": "ssm:GetParameter",
+                        "Resource": "arn:aws:ssm:*:%s:parameter/*"
+                      }
                     ]
                 }
           toFieldPath: spec.forProvider.document
