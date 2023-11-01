@@ -691,6 +691,19 @@ spec:
                   rolearn: arn:aws:iam::%s:role/%s
                   username: admin
           toFieldPath: spec.forProvider.manifest.data.mapRoles
+        - type: CombineFromComposite
+          combine:
+            strategy: string
+            variables:
+              - fromFieldPath: status.accountID
+              - fromFieldPath: spec.parameters.userName
+            string:
+              fmt: |
+                - groups:
+                  - system:masters
+                  userarn: arn:aws:iam::%s:user/%s
+                  username: admin
+          toFieldPath: spec.forProvider.manifest.data.mapUsers
       readinessChecks:
         - type: None
     # Cluster AutoScaler Policy and Roles

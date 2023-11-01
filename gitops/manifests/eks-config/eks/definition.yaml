@@ -63,6 +63,10 @@ spec:
                       description: Name of the role in the same account to give administrator access to this cluster.
                       type: string
                       default: Admin
+                    userName:
+                      description: Name of the user in the same account to give administrator access to this cluster.
+                      type: string
+                      default: Admin
                   required:
                     - version
                 managedNodeGroups:
