@@ -195,7 +195,8 @@ spec:
                         "Effect": "Allow",
                         "Principal": {
                             "Service": [
-                                "eks.amazonaws.com"
+                                "eks.amazonaws.com",
+                                "ec2.amazonaws.com"
                             ]
                         },
                         "Action": [
@@ -256,6 +257,34 @@ spec:
             - type: string
               string:
                 fmt: "eks-service-policy-%s"
+    - name: eks-kubernetes-api-policy
+      base:
+        apiVersion: iam.aws.crossplane.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            roleNameSelector:
+              matchControllerRef: true
+              matchLabels:
+                role: managed-nodegroup
+      patches:
+        - type: PatchSet
+          patchSetName: common-parameters
+        - type: CombineFromComposite
+          combine:
+            variables:
+              - fromFieldPath: status.accountID
+            strategy: string
+            string:
+              fmt: "arn:aws:iam::%s:policy/AccessKubernetesAPI"
+          toFieldPath: spec.forProvider.policyArn
+        - type: FromCompositeFieldPath
+          fromFieldPath: metadata.labels[crossplane.io/claim-name]
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "eks-kubernetes-api-policy-%s"
     - name: eks-vpcresource-controller-policy
       base:
         apiVersion: iam.aws.crossplane.io/v1beta1
@@ -363,6 +392,7 @@ spec:
                         "Effect": "Allow",
                         "Principal": {
                             "Service": [
+                                "eks.amazonaws.com",
                                 "ec2.amazonaws.com"
                             ]
                         },
@@ -724,6 +754,7 @@ spec:
           combine:
             variables:
               - fromFieldPath: status.clusterName
+              - fromFieldPath: status.accountID
             strategy: string
             string:
               fmt: |
@@ -751,9 +782,32 @@ spec:
                                 "ec2:DescribeLaunchTemplateVersions",
                                 "autoscaling:DescribeTags",
                                 "autoscaling:DescribeLaunchConfigurations",
-                                "ec2:DescribeInstanceTypes"
+                                "ec2:DescribeInstanceTypes",
+                                "
                             ],
                             "Resource": "*"
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                              "eks:ListFargateProfiles",
+                              "eks:DescribeNodegroup",
+                              "eks:ListNodegroups",
+                              "eks:ListUpdates",
+                              "eks:AccessKubernetesApi",
+                              "eks:ListAddons",
+                              "eks:DescribeCluster",
+                              "eks:DescribeAddonVersions",
+                              "eks:ListClusters",
+                              "eks:ListIdentityProviderConfigs",
+                              "iam:ListRoles"
+                            ],
+                            "Resource": "*"
+                      },
+                        {
+                          "Effect": "Allow",
+                          "Action": "ssm:GetParameter",
+                          "Resource": "arn:aws:ssm:*:%s:parameter/*"
                         }
                     ]
                 }
