@@ -132,3 +132,4 @@ dist
 .idea
 .DS_Store
 /aws-credentials.txt
+/kubeconfig.yaml
