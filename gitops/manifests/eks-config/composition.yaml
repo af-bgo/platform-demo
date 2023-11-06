@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: cluster-aws-official
+  name: cluster-aws
   labels:
-    provider: aws-official
+    provider: aws
     cluster: eks
 spec:
   compositeTypeRef:
