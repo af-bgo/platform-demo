@@ -2,7 +2,7 @@
 #kind: Application
 #metadata:
 #  annotations:
-#    argocd.argoproj.io/sync-wave: "4"
+#    argocd.argoproj.io/sync-wave: "5"
 #  name: eks-config
 #  namespace: argocd
 #spec:

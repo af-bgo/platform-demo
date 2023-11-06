@@ -2,7 +2,7 @@
 #kind: Application
 #metadata:
 #  annotations:
-#    argocd.argoproj.io/sync-wave: "4"
+#    argocd.argoproj.io/sync-wave: "6"
 #  name: eks-claim
 #  namespace: argocd
 #spec:
