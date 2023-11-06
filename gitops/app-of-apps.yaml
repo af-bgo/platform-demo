@@ -24,3 +24,4 @@ spec:
         factor: 2
     syncOptions:
       - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
