@@ -555,48 +555,6 @@ spec:
                 fmt: '%s-cluster'
       readinessChecks:
         - type: None
-    - name: ingress-nginx
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: ingress-nginx
-            chart:
-              name: ingress-nginx
-              repository: https://kubernetes.github.io/ingress-nginx
-              version: 4.8.3
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-ingress'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: keda
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: keda
-            chart:
-              name: kedacore/keda
-              repository: https://kedacore.github.io/charts
-              version: 2.12
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-keda'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
     - name: kubernetes
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
