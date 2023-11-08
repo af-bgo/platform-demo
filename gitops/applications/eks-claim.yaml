@@ -6,7 +6,7 @@
 #  name: eks-claim
 #  namespace: argocd
 #spec:
-#  source:
+  source:
 #    repoURL: 'https://github.com/af-bgo/platform-demo.git'
 #    targetRevision: main
 #    path: "gitops/manifests/eks-claim"
