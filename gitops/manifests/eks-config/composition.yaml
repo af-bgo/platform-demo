@@ -206,6 +206,33 @@ spec:
             - type: string
               string:
                 fmt: '%s-controlplane'
+    - name: iamattachment-k8s-controlplane
+      base:
+        apiVersion: iam.aws.upbound.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+           roleSelector:
+              matchControllerRef: true
+      patches:
+        - fromFieldPath: status.accountID
+          toFieldPath: spec.forProvider.policyArn
+          transforms:
+            - type: string
+              string:
+                fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-k8s-controlplane'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.roleSelector.matchLabels.role
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-controlplane'
     - name: iamattachment-service
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -228,6 +255,33 @@ spec:
             - type: string
               string:
                 fmt: '%s-controlplane'
+    - name: iamattachment-k8s-nodegroup
+      base:
+        apiVersion: iam.aws.upbound.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            roleSelector:
+              matchControllerRef: true
+      patches:
+        - fromFieldPath: status.accountID
+          toFieldPath: spec.forProvider.policyArn
+          transforms:
+            - type: string
+              string:
+                fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-k8s-nodegroup'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.roleSelector.matchLabels.role
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-nodegroup'
     - name: iamattachment-worker
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -608,9 +662,9 @@ spec:
             manifest:
               apiVersion: v1
               kind: Namespace
-              label:
-                istio-injection: enabled
               metadata:
+                labels:
+                  istio-injection: enabled
                 name: prod
       patches:
         - fromFieldPath: spec.id
@@ -631,10 +685,10 @@ spec:
             manifest:
               apiVersion: v1
               kind: Namespace
-              label:
-                istio-injection: enabled
               metadata:
                 name: dev
+                labels:
+                  istio-injection: enabled
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
