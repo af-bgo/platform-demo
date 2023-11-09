@@ -603,6 +603,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: v1
@@ -625,6 +626,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: v1
@@ -647,6 +649,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: v1
@@ -668,6 +671,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: rbac.authorization.k8s.io/v1
@@ -696,6 +700,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: pkg.crossplane.io/v1alpha1
@@ -718,6 +723,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: pkg.crossplane.io/v1
@@ -742,6 +748,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: pkg.crossplane.io/v1
@@ -766,6 +773,7 @@ spec:
         apiVersion: kubernetes.crossplane.io/v1alpha1
         kind: Object
         spec:
+          deletionPolicy: Orphan
           forProvider:
             manifest:
               apiVersion: aws.upbound.io/v1beta1
@@ -870,5 +878,161 @@ spec:
             - type: string
               string:
                 fmt: '%s-istio-ingressgw'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+    - name: aws-auth-configmap
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          managementPolicy: ObserveCreateUpdate
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: ConfigMap
+              metadata:
+                name: aws-auth
+                namespace: kube-system
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-aws-auth'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+        - type: CombineFromComposite
+          combine:
+            strategy: string
+            variables:
+              - fromFieldPath: status.nodeGroupArn
+              - fromFieldPath: status.accountID
+            string:
+              fmt: |
+                - groups:
+                  - system:bootstrappers
+                  - system:nodes
+                  rolearn: %s
+                  username: system:node:{{EC2PrivateDNSName}}
+          toFieldPath: spec.forProvider.manifest.data.mapRoles
+        - type: CombineFromComposite
+          combine:
+            strategy: string
+            variables:
+              - fromFieldPath: status.accountID
+            string:
+              fmt: |
+                - groups:
+                  - system:masters
+                  rolearn: arn:aws:iam::%s:root
+          toFieldPath: spec.forProvider.manifest.data.mapUsers
+      readinessChecks:
+        - type: None
+    - name: k8s-cluster-sa
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: ServiceAccount
+              metadata:
+                name: k8s-sa
+                namespace: kube-system
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-k8s-cluster-sa'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+    - name: k8s-cluster-role
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          forProvider:
+            manifest:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRole
+              metadata:
+                name: k8s-clusterrole
+              rules:
+                - apiGroups: [ "" ]
+                  resources: [ "nodes", "namespaces", "pods", "configmaps", "endpoints", "events", "limitranges", "persistentvolumeclaims", "podtemplates", "replicacontrollers", "resourcequotas", "secrets", "serviceaccounts", "services" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "apps" ]
+                  resources: [ "deployments", "daemonsets", "statefulsets", "replicasets" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "batch" ]
+                  resources: [ "jobs", "cronjobs" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "coordination.k8s.io" ]
+                  resources: [ "leases" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "discovery.k8s.io" ]
+                  resources: [ "endpointslices" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "events.k8s.io" ]
+                  resources: [ "events" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "extensions" ]
+                  resources: [ "daemonsets", "deployments", "ingresses", "networkpolicies", "replicasets" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "networking.k8s.io" ]
+                  resources: [ "ingresses", "networkpolicies" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "policy" ]
+                  resources: [ "poddisruptionbudgets" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "rbac.authorization.k8s.io" ]
+                  resources: [ "rolebindings", "roles" ]
+                  verbs: [ "get", "list" ]
+                - apiGroups: [ "storage.k8s.io" ]
+                  resources: [ "csistoragecapacities" ]
+                  verbs: [ "get", "list" ]
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-k8s-clusterrole'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
+    - name: k8s-cluster-role-binding
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          forProvider:
+            manifest:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRoleBinding
+              metadata:
+                name: k8s-clusterrolebinding
+              roleRef:
+                apiGroup: rbac.authorization.k8s.io
+                kind: ClusterRole
+                name: k8s-clusterrole
+              subjects:
+                - kind: ServiceAccount
+                  name: k8s-sa
+                  namespace: kube-system
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-k8s-clusterrolebinding'
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
