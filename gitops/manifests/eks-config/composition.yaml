@@ -215,12 +215,16 @@ spec:
            roleSelector:
               matchControllerRef: true
       patches:
-        - fromFieldPath: status.accountID
+        - type: CombineFromComposite
+          combine:
+            strategy: string
+            variables:
+              - fromFieldPath: status.accountID
+            string:
+              fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
           toFieldPath: spec.forProvider.policyArn
-          transforms:
-            - type: string
-              string:
-                fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
+          policy:
+            toFieldPath: Required
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
@@ -264,12 +268,16 @@ spec:
             roleSelector:
               matchControllerRef: true
       patches:
-        - fromFieldPath: status.accountID
+        - type: CombineFromComposite
+          combine:
+            strategy: string
+            variables:
+              - fromFieldPath: status.accountID
+            string:
+              fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
           toFieldPath: spec.forProvider.policyArn
-          transforms:
-            - type: string
-              string:
-                fmt: 'arn:aws:iam::%s:policy/AccessKubernetesAPI'
+          policy:
+            toFieldPath: Required
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
           transforms:
