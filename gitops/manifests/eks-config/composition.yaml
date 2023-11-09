@@ -27,8 +27,8 @@ spec:
               matchControllerRef: true
             vpcConfig:
               - endpointPrivateAccess: true
-              - endpointPublicAccess: true
-              - subnetIdSelector:
+                endpointPublicAccess: true
+                subnetIdSelector:
                   matchControllerRef: true
       patches:
         - fromFieldPath: spec.id
