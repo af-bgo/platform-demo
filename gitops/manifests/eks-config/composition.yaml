@@ -212,6 +212,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
+           policyArn: arn:aws:iam::aws:policy/AmazonEKSServicePolicy
            roleSelector:
               matchControllerRef: true
       patches:
@@ -265,6 +266,7 @@ spec:
         kind: RolePolicyAttachment
         spec:
           forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
             roleSelector:
               matchControllerRef: true
       patches:
@@ -617,27 +619,6 @@ spec:
                 fmt: '%s-cluster'
       readinessChecks:
         - type: None
-    - name: crossplane
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: crossplane-system
-            chart:
-              name: crossplane
-              repository: https://charts.crossplane.io/stable
-              version: 1.13.1
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-crossplane'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
     - name: kubernetes
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -706,158 +687,6 @@ spec:
                 fmt: '%s-ns-dev'
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
-    - name: k8s-provider-sa
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: v1
-              kind: ServiceAccount
-              metadata:
-                name: provider-kubernetes
-                namespace: crossplane-system
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-k8s-provider-sa'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: k8s-provider-crd
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: rbac.authorization.k8s.io/v1
-              kind: ClusterRoleBinding
-              metadata:
-                name: provider-kubernetes
-              subjects:
-                - kind: ServiceAccount
-                  name: provider-kubernetes
-                  namespace: crossplane-system
-              roleRef:
-                kind: ClusterRole
-                name: cluster-admin
-                apiGroup: rbac.authorization.k8s.io
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-k8s-provider-crb'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: k8s-provider-cc
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: pkg.crossplane.io/v1alpha1
-              kind: ControllerConfig
-              metadata:
-                name: provider-kubernetes
-              spec:
-                serviceAccountName: provider-kubernetes
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-k8s-provider-cc'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: kubernetes-provider
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: pkg.crossplane.io/v1
-              kind: Provider
-              metadata:
-                name: crossplane-contrib-provider-kubernetes
-              spec:
-                package: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.6.0
-                controllerConfigRef:
-                  name: provider-kubernetes
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-kubernetes-provider'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: helm-provider
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: pkg.crossplane.io/v1
-              kind: Provider
-              metadata:
-                name: crossplane-provider-helm
-              spec:
-                package: xpkg.upbound.io/crossplane-contrib/provider-helm:v0.13.0
-                controllerConfigRef:
-                  name: provider-kubernetes
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-helm-provider'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: aws-pc
-      base:
-        apiVersion: kubernetes.crossplane.io/v1alpha1
-        kind: Object
-        spec:
-          deletionPolicy: Orphan
-          forProvider:
-            manifest:
-              apiVersion: aws.upbound.io/v1beta1
-              kind: ProviderConfig
-              metadata:
-                name: default
-              spec:
-                credentials:
-                  source: Secret
-                  secretRef:
-                    namespace: crossplane-system
-                    name: aws-creds
-                    key: creds
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-aws-pc'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
     - name: keda
       base:
         apiVersion: helm.crossplane.io/v1beta1
@@ -877,69 +706,6 @@ spec:
             - type: string
               string:
                 fmt: '%s-keda'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: istio-base
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: istio-system
-            chart:
-              name: base
-              repository: https://istio-release.storage.googleapis.com/charts
-              version: 1.19.3
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-istio-base'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: istio-discovery
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: istio-system
-            chart:
-              name: istiod
-              repository: https://istio-release.storage.googleapis.com/charts
-              version: 1.19.3
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-istiod'
-        - fromFieldPath: spec.id
-          toFieldPath: spec.providerConfigRef.name
-    - name: istio-ingress-gateway
-      base:
-        apiVersion: helm.crossplane.io/v1beta1
-        kind: Release
-        spec:
-          rollbackLimit: 3
-          forProvider:
-            namespace: dev
-            chart:
-              name: gateway
-              repository: https://istio-release.storage.googleapis.com/charts
-              version: 1.19.3
-      patches:
-        - fromFieldPath: spec.id
-          toFieldPath: metadata.name
-          transforms:
-            - type: string
-              string:
-                fmt: '%s-istio-ingressgw'
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
     - name: aws-auth-configmap
