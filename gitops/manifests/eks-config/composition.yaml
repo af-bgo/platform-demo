@@ -652,8 +652,6 @@ spec:
               apiVersion: v1
               kind: Namespace
               metadata:
-                labels:
-                  istio-injection: enabled
                 name: prod
       patches:
         - fromFieldPath: spec.id
@@ -676,8 +674,6 @@ spec:
               kind: Namespace
               metadata:
                 name: dev
-                labels:
-                  istio-injection: enabled
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
