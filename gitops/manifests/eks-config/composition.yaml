@@ -597,6 +597,24 @@ spec:
             - type: string
               string:
                 fmt: '%s-1c'
+    - name: hostedZone
+      base:
+        apiVersion: route53.aws.upbound.io/v1beta1
+        kind: Zone
+        spec:
+          forProvider:
+            region: eu-north-1
+            name: outage-reporting.de
+            vpc:
+              vpcIdSelector:
+                matchControllerRef: true
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-zone'
     - name: helm
       base:
         apiVersion: helm.crossplane.io/v1beta1
