@@ -606,8 +606,8 @@ spec:
             region: eu-north-1
             name: outage-reporting.de
             vpc:
-              vpcIdSelector:
-                matchControllerRef: true
+             - vpcIdSelector:
+                 matchControllerRef: true
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
