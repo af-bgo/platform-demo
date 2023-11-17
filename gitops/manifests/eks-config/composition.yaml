@@ -336,6 +336,50 @@ spec:
             - type: string
               string:
                 fmt: '%s-nodegroup'
+    - name: iamattachment-route53-controlplane
+      base:
+        apiVersion: iam.aws.upbound.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonRoute53FullAccess
+            roleSelector:
+              matchControllerRef: true
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-route53-controlplane'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.roleSelector.matchLabels.role
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-controlplane'
+    - name: iamattachment-route53-nodegroup
+      base:
+        apiVersion: iam.aws.upbound.io/v1beta1
+        kind: RolePolicyAttachment
+        spec:
+          forProvider:
+            policyArn: arn:aws:iam::aws:policy/AmazonRoute53FullAccess
+            roleSelector:
+              matchControllerRef: true
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-route53-nodegroup'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.forProvider.roleSelector.matchLabels.role
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-nodegroup'
     - name: iamattachment-registry
       base:
         apiVersion: iam.aws.upbound.io/v1beta1
@@ -701,6 +745,27 @@ spec:
                 fmt: '%s-ns-dev'
         - fromFieldPath: spec.id
           toFieldPath: spec.providerConfigRef.name
+    - name: ns-cert-manager
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: cert-manager
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-ns-cert-manager'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
     - name: keda
       base:
         apiVersion: helm.crossplane.io/v1beta1
@@ -772,6 +837,28 @@ spec:
           toFieldPath: spec.forProvider.manifest.data.mapUsers
       readinessChecks:
         - type: None
+    - name: cert-manager-sa
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          deletionPolicy: Orphan
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: ServiceAccount
+              metadata:
+                name: sa-cert-manager
+                namespace: cert-manager
+      patches:
+        - fromFieldPath: spec.id
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: '%s-sa-cert-manager'
+        - fromFieldPath: spec.id
+          toFieldPath: spec.providerConfigRef.name
     - name: k8s-cluster-sa
       base:
         apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -869,6 +956,9 @@ spec:
                 - kind: ServiceAccount
                   name: k8s-sa
                   namespace: kube-system
+                - kind: ServiceAccount
+                  name: sa-cert-manager
+                  namespace: cert-manager
       patches:
         - fromFieldPath: spec.id
           toFieldPath: metadata.name
